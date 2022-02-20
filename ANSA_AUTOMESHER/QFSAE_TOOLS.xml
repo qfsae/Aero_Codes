@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Exported_ANSA_Containers version="3.0">
+ <head>
+  <title>ANSA settings</title>
+ </head>
+ <body>
+  <GUI>
+   <Toolbars_Custom>
+    <toolbar name="QFSAE_TOOLS">
+     <item custom_name="QFSAEAutoMesh" m_shown="1" icon="drawing_styles_hidden_wire.svg" from="User Script>QFSAE_TOOLS>QFSAEAutoMesh::QFSAEAutoMesh"/>
+     <item custom_name="GenerateGBMR" m_shown="1" icon="module_mesh.svg" from="User Script>QFSAE_TOOLS>GenerateGBMR::GenerateGBMR"/>
+     <item custom_name="OutputSTL" m_shown="1" icon="deck_star.svg" from="User Script>QFSAE_TOOLS>OutputSTL::OutputSTL"/>
+    </toolbar>
+   </Toolbars_Custom>
+  </GUI>
+ </body>
+</Exported_ANSA_Containers>
