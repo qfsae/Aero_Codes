@@ -134,7 +134,7 @@ private void outputSurfVis(Simulation sim, String exportpath, String folder, int
 
     String[] names = {"Top", "Bottom"};
 
-    String[] partorder = {"FW", "RW", "Floor"};
+    String[] partorder = {"FW", "RW", "Floor", "All"};
 
     String[] scenes = {"SurfVisCP", "SurfVisShear"};
 
@@ -164,12 +164,11 @@ private void outputSurfVis(Simulation sim, String exportpath, String folder, int
 
     		for (int i = 0; i < partorder.length; i++){
     			for (Displayer d : disps){
-    				if (d.getPresentationName().contains(partorder[i])){
+    				if (d.getPresentationName().contains(partorder[i]) || partorder[i] == "All"){
     					d.setOpacity(1.0);
 
     				} else {
     					d.setOpacity(0.1);
-
     				}
     				sim.println("Outputting surface: " + scenes[k] + ", " + partorder[i] + ", " + names[j]);
     				scene.printAndWait(resolvePath(exportpath + sep + scenes[k] + sep + folder + "_" + partorder[i] + " " + names[j] + ".png"), 1, xsize, ysize, true, false);
