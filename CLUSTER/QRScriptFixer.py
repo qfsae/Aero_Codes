@@ -56,12 +56,54 @@ def updateScripts(trial, cores, meshCores):
 		elif 'solve' in script:
 			prefix = solvePrefix
 		elif 'postPro' in script:
-			prefix = exportPrefix
+			prefix = postProPrefix
 		
 		scriptPath = cwd + script
 		modifyScript(scriptPath, trialNumber, prefix, numCores)
 
-def main(trials, cores, meshCores):
+def updatePostPro(trial, doGBMR, baseline):
+	# Routine for updating post processing routines requests
+
+	doSep = ''
+
+	if trial != '':
+		doSep = '/'
+
+	cwd = os.getcwd() + "/" + trial + doSep
+	
+	for (dirpath, dirnames, filenames) in os.walk(cwd):
+		for file in filenames:
+			if re.match(".*postPro.*sh", file):
+				cwd += file
+
+	f = open(cwd, 'r')
+	tempfile = [line.rstrip() for line in f.readlines()]
+	for i in range(len(tempfile)):
+		if re.match(".*exportGBMR=.*",tempfile[i]):
+			if doGBMR == True:
+				tempfile[i] = "exportGBMR=1"
+			else:
+				tempfile[i] = "exportGBMR=0"
+
+		if re.match(".*baseline=\"",tempfile[i]):
+			if baseline != '':
+				tempfile[i] = "baseline=\"\\\"" + baseline + "\\\"\""
+		
+		if re.match(".*doDelta=",tempfile[i]):
+			if baseline != '':
+				tempfile[i] = "doDelta=1"
+			else:
+				tempfile[i] = "doDelta=0"
+
+	f.close()
+
+	fOut = open(cwd, 'w')
+	for line in tempfile:
+		fOut.write(line + '\n')
+
+	fOut.close
+
+def main(trials, doGBMR, baseline, cores, meshCores):
 	for trial in trials:
 		if trial == '':
 			print("Running QRScriptFixer for current trial...\n========================================\n")
@@ -73,15 +115,22 @@ def main(trials, cores, meshCores):
 		updateScripts(trial, cores, meshCores)
 		print("Batch scripts updated.\n")
 
+		# Update post pro requests
+		print("Updating GBMR exporting and delta baseline...")
+		updatePostPro(trial, doGBMR, baseline)
+		print("Post processing script updated.\n")
+
 		print("scriptFixer complete.\n")
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Update run scripts with set values. Meant to be run in the trial directory, or in the RUN directory with trials specified')
 
 	parser.add_argument('-t', action='store', dest='trials', type=str, nargs='+', default=[''])
+	parser.add_argument('-exportGBMR', action='store_true', dest='doGBMR')
+	parser.add_argument('-delta', action='store', type=str, dest='baseline', default='')
 	parser.add_argument('-c', action='store', type=int, dest='cores', default=112)
 	parser.add_argument('-cm', action='store', type=int, dest='meshCores', default=112)
     
 	args = parser.parse_args()
 
-	main(args.trials, args.cores, args.meshCores)
+	main(args.trials, args.doGBMR, args.baseline, args.cores, args.meshCores)
