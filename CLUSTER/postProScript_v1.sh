@@ -4,8 +4,8 @@
 #SBATCH --mem=0
 #SBATCH -n 112
 #SBATCH --partition=scb
-#SBATCH -o %j.o
-#SBATCH -e %j.e
+#SBATCH -o %x.o
+#SBATCH -e %x.e
 #SBATCH --time=0-10:00:00
 #SBATCH -x node[201-203,235]
 
@@ -43,7 +43,7 @@ echo "----------------------------------------------------"
 #process for submitting post processing operations
 echo "Beginning post-processing..."
 POSTSTART=`date +%s`
-$starccm+ -rsh ssh -batchsystem slurm $sim_file -doepower -np $SLURM_NTASKS -rr -rrthreads 8 -batch $POST >> LOG-03-POST-$runname.log
+$starccm+ -rsh ssh -batchsystem slurm $sim_file -doepower -np $SLURM_NTASKS -rr -rrthreads 8 -batch $POST
 POSTEND=`date +%s`
 echo "Post processing finished"
 echo "Time elapsed: $(($POSTEND - $POSTSTART)) seconds to run"

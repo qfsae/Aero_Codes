@@ -4,8 +4,8 @@
 #SBATCH --mem=0
 #SBATCH -n 112
 #SBATCH --partition=scb
-#SBATCH -o %j.o
-#SBATCH -e %j.e
+#SBATCH -o %x.o
+#SBATCH -e %x.e
 #SBATCH --time=0-02:00:00
 #SBATCH -x node[201-203,235]
 
